@@ -1,0 +1,23 @@
+# Let's change the SELinux context on chrony.conf to force a failure starting chronyd
+# when a specific version of selinux-policy is installed.
+postprocess:
+  - |
+    #!/bin/bash
+    set -eux -o pipefail
+    if rpm --dbpath /usr/share/rpm/ -q selinux-policy-38.21-1.fc38; then
+        cat <<EOF > /usr/lib/systemd/system/bad-selinux-chronyd.service
+    [Unit]
+    Before=chronyd.service
+    [Service]
+    Type=oneshot
+    ExecStart=chcon -v -t shadow_t /etc/chrony.conf
+    RemainAfterExit=yes
+    EOF
+        cat <<EOF > /usr/lib/systemd/system/chronyd.service.d/bad-selinux-chronyd.conf
+    [Unit]
+    Requires=bad-selinux-chronyd.service
+    EOF
+        # Also blank out the platform-chrony.conf override because it plays
+        # around with which file gets loaded
+        > /usr/lib/systemd/system/chronyd.service.d/platform-chrony.conf
+      fi

@@ -9,6 +9,7 @@ include:
   - networking-tools.yaml
   - user-experience.yaml
   - shared-workarounds.yaml
+  - cosa-tutorial.yaml
 
 ostree-layers:
   - overlay/05core
