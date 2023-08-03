@@ -1,6 +1,10 @@
 # CoreOS Assembler Tutorial
 
+## Background
+
 To develop, build, and debug CoreOS we use a tool called [`coreos-assembler`](https://github.com/coreos/coreos-assembler) also known as `cosa`. The software is run as a container and can be pulled from the `quay.io` container registry.
+
+## Setup
 
 A good way to run `cosa` is by using a bash function that wraps a `podman run` or `docker run` command. There are more complex versions of this function in [the docs](https://github.com/coreos/coreos-assembler/blob/main/docs/building-fcos.md#define-a-bash-alias-to-run-cosa), but for the purposes of this lab we can use something a little more basic:
 
@@ -25,6 +29,10 @@ cosa init --branch=cosa-tutorial-fedora-coreos-config \
     --commit=c7e35d0e66792560f55e1c299c25fa182bbb3171 \
     https://github.com/coreos/coreos-tutorials.git
 ```
+
+NOTE: The first run of `cosa` will take some extra time on startup due to initialization.
+
+## Tutorial
 
 In the `cosa init` command above we set up `cosa` to initialize a "config repo" from `https://github.com/dustymabe/fedora-coreos-config.git` at a specific commit. The config repo is what defines what will go into the CoreOS image(s) that are going to be built. Since the config repo is backed by `git` you can checkout different commits in the history and build an image from the source at that time.
 
@@ -74,9 +82,14 @@ NOTE: If the console output seems stuck press `CTRL-c` and `<ENTER>` a few times
 You can exit from this session (and thus terminate the machine) via `CTRL-a` + `x`.
 
 
+Next, let's run a test. There are a lot of automated tests that are
+defined that can be run against a CoreOS build. Let's view them now:
 
+```
+cosa kola list
+```
 
-Next, let's run a test. The `ext.config.files.license` test just verifies that a `LICENSE` file was added for the `fedora-coreos-config` contents into the build image. Inspect the source for the test via:
+Let's pick out a simple one to run. The `ext.config.files.license` test just verifies that a `LICENSE` file was added for the `fedora-coreos-config` contents into the build image. Inspect the source for the test via:
 
 ```
 cat src/config/tests/kola/files/license
@@ -128,7 +141,6 @@ Upgraded:
 We can also see a new build in the builds directory and the `latest` symlink has been updated:
 
 ```
-ls builds/
 $ ls builds/
 38.20230731.dev.0  38.20230731.dev.1  builds.json  latest
 $ readlink builds/latest
@@ -214,7 +226,7 @@ We can stop that old system:
 [core@cosa-devsh ~]$ exit
 ```
 
-And start a new system while adding the `enforcing=0` kernel command line argument via the `-kargs` argument to `cosa run`:
+And start a new system while adding the `enforcing=0` kernel command line argument via the `--kargs` argument to `cosa run`:
 
 ```
 cosa run --kargs='enforcing=0'
@@ -291,7 +303,9 @@ And of course it does pass! It seems almost certain the problem is related to th
 If we want to go back and investigate further the broken system we can always just specify which build to operate on:
 
 ```
-cosa run --build=38.20230731.dev.1
+OLDESTBUILD=$(jq -r .builds[-1].id builds/builds.json)
+echo $OLDESTBUILD
+cosa run --build=$OLDESTBUILD
 ```
 
 Now we are armed with enough information to open an issue or bug with the maintainers to investigate and get the issue fixed. For Fedora CoreOS we typically will pin on an older version of a package until a fix exists.
@@ -314,4 +328,8 @@ Discuss: https://discussion.fedoraproject.org/tag/coreos
 
 [core@cosa-devsh ~]$
 ```
+
+## Cleanup
+
+You can now cleanup by removing the tutorials directory.
 
