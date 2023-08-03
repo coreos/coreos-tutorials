@@ -65,7 +65,7 @@ When a `cosa` command is run it usually operates on the latest build (as found v
 cosa run
 ```
 
-This command will boot the machine and log you in via SSH automatically. The machine will be destroyed after exitting the SSH session:
+This command will boot the machine and log you in via SSH automatically. The machine will be destroyed after exiting the SSH session:
 
 ```
 [core@cosa-devsh ~]$ exit
@@ -310,7 +310,7 @@ cosa run --build=$OLDESTBUILD
 
 Now we are armed with enough information to open an issue or bug with the maintainers to investigate and get the issue fixed. For Fedora CoreOS we typically will pin on an older version of a package until a fix exists.
 
-That was a good excercise, but most of the time people may report an issue in an existing Fedora CoreOS (i.e. maybe a new issue we don't have test coverage for). In that case we can just download an existing build and inspect it using `cosa` without having to build a new copy locally
+That was a good exercise, but most of the time people may report an issue in an existing Fedora CoreOS (i.e. maybe a new issue we don't have test coverage for). In that case we can just download an existing build and inspect it using `cosa` without having to build a new copy locally using:
 
 ```
 cosa buildfetch --stream=stable --build=38.20230709.3.0 --artifact=qemu
@@ -318,7 +318,7 @@ cosa decompress
 cosa run
 ```
 
-shows:
+Which shows:
 
 ```
 $ cosa run
@@ -331,5 +331,13 @@ Discuss: https://discussion.fedoraproject.org/tag/coreos
 
 ## Cleanup
 
-You can now cleanup by removing the tutorials directory.
+You can now cleanup by deleting the files and removing the tutorials directory:
 
+
+```
+cosa shell -- sudo rm -rf builds/ cache/ overrides/ src/ tmp/
+cd ..
+rmdir tutorial
+```
+
+NOTE: Because of user namespacing it's easier to delete the files from inside the `cosa` container. Deleting them from outside the container my require `sudo` access.
