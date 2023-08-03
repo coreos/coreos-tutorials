@@ -1,2 +1,3 @@
-# tutorials
-Tutorials for various CoreOS related projects.
+# Tutorials for various CoreOS related projects.
+
+- [CoreOS Assembler Tutorial](coreos-assembler/README.md)
