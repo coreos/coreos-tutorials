@@ -11,10 +11,7 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = "eu-west-1"
-}
-
+provider "aws" {}
 provider "ct" {}
 
 variable "student_password_hash" {

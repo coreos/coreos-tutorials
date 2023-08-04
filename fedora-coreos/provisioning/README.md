@@ -12,11 +12,19 @@ export TF_VAR_core_user_ssh_pubkey_string=<ssh-rsa AAAA..>
 export TF_VAR_student_password_hash=<password>
 ```
 
+Configure AWS credentials in your environment (env variables or profile files in expected locations). For example:
+
+```
+ export AWS_REGION=us-east-1
+ export AWS_ACCESS_KEY_ID=...
+ export AWS_SECRET_ACCESS_KEY=...
+```
+
+To bring up an instance and output the IP for you to SSH to:
+
 ```
 terraform apply
 ```
-
-Will bring up the instance and show you the IP to contact.
 
 To bring down just the instance:
 
