@@ -19,12 +19,16 @@ provider "ct" {}
 
 variable "student_password_hash" {
  type        = string
- default     = "REPLACE"
+}
+
+variable "core_user_ssh_pubkey_string" {
+ type        = string
 }
 
 data "ct_config" "butane" {
   content = templatefile("fcos-lab-tutorial.bu", {
     student_password_hash = bcrypt(var.student_password_hash)
+    core_user_ssh_pubkey_string = var.core_user_ssh_pubkey_string
   })
   strict = true
 }

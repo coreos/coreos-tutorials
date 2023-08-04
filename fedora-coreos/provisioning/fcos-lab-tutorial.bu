@@ -4,7 +4,7 @@ passwd:
   users:
     - name: core
       ssh_authorized_keys:
-        - ssh-rsa AAAA...
+        - ${core_user_ssh_pubkey_string}
     - name: labuser1
       password_hash: ${student_password_hash}
     - name: labuser2
