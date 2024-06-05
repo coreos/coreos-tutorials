@@ -1,5 +1,5 @@
 variant: fcos
-version: 1.4.0
+version: 1.5.0
 passwd:
   users:
     - name: core
@@ -62,17 +62,17 @@ storage:
     - path: /usr/local/bin/butane
       mode: 0755
       contents:
-        source: https://github.com/coreos/butane/releases/download/v0.18.0/butane-x86_64-unknown-linux-gnu
+        source: https://github.com/coreos/butane/releases/download/v0.20.0/butane-x86_64-unknown-linux-gnu
     - path: /usr/local/bin/ignition-validate
       mode: 0755
       contents:
-        source: https://github.com/coreos/ignition/releases/download/v2.16.2/ignition-validate-x86_64-linux
+        source: https://github.com/coreos/ignition/releases/download/v2.18.0/ignition-validate-x86_64-linux
     - path: /srv/fedora-coreos.qcow2.xz
       mode: 0644
       contents:
-        source: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/38.20230709.3.0/x86_64/fedora-coreos-38.20230709.3.0-qemu.x86_64.qcow2.xz
+        source: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/40.20240519.3.0/x86_64/fedora-coreos-40.20240519.3.0-qemu.x86_64.qcow2.xz
         verification:
-          hash: sha256-89cd1b9b236d6b6e1a4b8886810323f6c376f29923fbfb99ec31024919dd3d69
+          hash: sha512-7bc2f327f5d29f26ebf6aaa6983d28946feed3ad1c062751ea3f7f9cee065e7822301c070031015ce4a181fd301783035d7ea953113fb6956ea04a541cf39c85
     - path: /usr/local/bin/setup-users.sh
       mode: 0755
       contents:
