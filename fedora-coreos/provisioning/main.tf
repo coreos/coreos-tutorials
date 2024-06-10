@@ -11,7 +11,9 @@ terraform {
   }
 }
 
-provider "aws" {}
+provider "aws" {
+  region = "eu-central-1"
+}
 provider "ct" {}
 
 variable "student_password_hash" {
@@ -34,7 +36,7 @@ resource "aws_instance" "fcos-lab-instance" {
   tags = {
     Name = "fcos-lab"
   }
-  ami           = "ami-0ea3c2efdcead938c"
+  ami           = "ami-06128ecf4b4101217"
   instance_type = "c5n.metal"
   user_data     = data.ct_config.butane.rendered
   associate_public_ip_address = "true"
@@ -42,7 +44,7 @@ resource "aws_instance" "fcos-lab-instance" {
   subnet_id              = aws_subnet.private_subnets[0].id
   root_block_device {
       volume_size = "100"
-      volume_type = "gp3"
+      volume_type = "gp2"
   }
 }
 
