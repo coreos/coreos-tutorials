@@ -43,6 +43,16 @@ passwd:
       password_hash: ${student_password_hash}
     - name: labuser19
       password_hash: ${student_password_hash}
+    - name: labuser20
+      password_hash: ${student_password_hash}
+    - name: labuser21
+      password_hash: ${student_password_hash}
+    - name: labuser22
+      password_hash: ${student_password_hash}
+    - name: labuser23
+      password_hash: ${student_password_hash}
+    - name: labuser24
+      password_hash: ${student_password_hash}
 storage:
   files:
     - path: /etc/ssh/sshd_config.d/20-enable-passwords.conf
@@ -67,6 +77,10 @@ storage:
       mode: 0755
       contents:
         source: https://github.com/coreos/ignition/releases/download/v2.18.0/ignition-validate-x86_64-linux
+    - path: /usr/local/bin/launch_coreos_vm
+      mode: 0755
+      contents:
+        source: https://raw.githubusercontent.com/jbtrystram/devconf24-coreos-workshop/main/launch_coreos_vm
     - path: /srv/fedora-coreos.qcow2.xz
       mode: 0644
       contents:
@@ -79,7 +93,7 @@ storage:
         inline: |
           #!/bin/bash
           set -eux -o pipefail
-          for x in {1..19}; do
+          for x in {1..24}; do
               install --group="labuser$${x}" --owner="labuser$${x}" -d /home/labuser$${x}/coreos
               ln /srv/fedora-coreos.qcow2 /home/labuser$${x}/coreos/fedora-coreos.qcow2
               sudo -u "labuser$${x}" ssh-keygen -f "/var/home/labuser$${x}/.ssh/id_rsa" -N ""
