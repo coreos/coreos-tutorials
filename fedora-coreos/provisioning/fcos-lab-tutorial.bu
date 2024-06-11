@@ -80,7 +80,7 @@ storage:
     - path: /usr/local/bin/launch_coreos_vm
       mode: 0755
       contents:
-        source: https://raw.githubusercontent.com/jbtrystram/devconf24-coreos-workshop/main/launch_coreos_vm
+        source: https://raw.githubusercontent.com/coreos/coreos-tutorials/main/fedora-coreos/provisioning/launch_coreos_vm
     - path: /srv/fedora-coreos.qcow2.xz
       mode: 0644
       contents:
