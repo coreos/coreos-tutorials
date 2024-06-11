@@ -81,6 +81,10 @@ storage:
       mode: 0755
       contents:
         source: https://raw.githubusercontent.com/coreos/coreos-tutorials/main/fedora-coreos/provisioning/launch_coreos_vm
+    - path: /srv/dummy.ign
+      mode: 0755
+      contents:
+        inline: '{"ignition":{"version":"3.4.0"}}'
     - path: /srv/fedora-coreos.qcow2.xz
       mode: 0644
       contents:
