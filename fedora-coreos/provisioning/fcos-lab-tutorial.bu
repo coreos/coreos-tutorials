@@ -68,7 +68,7 @@ storage:
       contents:
         inline: |
           [Service]
-          Environment=RPMS="virt-install libvirt-daemon-kvm libvirt-daemon-config-network"
+          Environment=RPMS="virt-install libvirt-daemon-kvm libvirt-daemon-config-network vim"
     - path: /usr/local/bin/butane
       mode: 0755
       contents:

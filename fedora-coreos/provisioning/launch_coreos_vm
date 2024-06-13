@@ -61,7 +61,7 @@ fi
 
 if test -n "${BUTANE_CONFIG}"; then
   IGNITION_CONFIG=$(mktemp --suffix=.ign)
-  butane --pretty --strict "${BUTANE_CONFIG}" --output "${IGNITION_CONFIG}"
+  butane --pretty --strict "${BUTANE_CONFIG}" --output "${IGNITION_CONFIG}" --files-dir .
 fi
 
 
