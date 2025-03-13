@@ -118,7 +118,7 @@ systemd:
         Type=oneshot
         RemainAfterExit=yes
         ExecStart=/usr/bin/rpm-ostree install --apply-live --allow-inactive $RPMS
-        ExecStart=sed -i s/192.168.122/192.168.124/g /etc/libvirt/qemu/networks/default.xml 
+        ExecStart=sed -i s/192.168.122/192.168.124/g /etc/libvirt/qemu/networks/default.xml
         ExecStart=systemctl enable --now virtnetworkd.service libvirtd.socket
         ExecStart=/bin/touch /var/lib/%N.stamp
         [Install]
