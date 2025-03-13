@@ -4,8 +4,8 @@ set -euo pipefail
 print_help() {
     cat 1>&2 <<'EOF'
 Usage: $0 [OPTIONS]
-       
-  Launch a coreOS VM instance, optionnally attaching an ignition config. 
+
+  Launch a coreOS VM instance, optionnally attaching an ignition config.
 
   The following options are available:
 
@@ -16,7 +16,7 @@ Usage: $0 [OPTIONS]
 
 
   The following environnement variables are aslo supported:
-  
+
   BACKING_STORE_PATH      Set a custom path for the boot backing store
   VIRT_INSTALL_EXTRA_ARGS Adds extra arguments to the virt-install command
 
@@ -51,7 +51,7 @@ while getopts 'hi:b:d:' FLAG; do
       echo "error: unrecognized option: $FLAG"
       ;;
     esac
-done    
+done
 shift "$((OPTIND -1))"
 
 if test -n "${IGNITION_CONFIG}" && test -n "${BUTANE_CONFIG}"; then
@@ -67,11 +67,11 @@ fi
 
 
 # Setup the correct SELinux label to allow access to the config
-if test -n "${IGNITION_CONFIG}"; then 
+if test -n "${IGNITION_CONFIG}"; then
   chcon --verbose --type svirt_home_t "${IGNITION_CONFIG}"
   IGNITION_CONFIG=$(realpath ${IGNITION_CONFIG})
-else 
-  IGNITION_CONFIG="/srv/dummy.ign" 
+else
+  IGNITION_CONFIG="/srv/dummy.ign"
 fi
 
 
@@ -83,7 +83,6 @@ virt-install --transient --name=fcos-"${USER}" --vcpus=2 --ram=1024 --os-variant
     "${IGN_CMDLINE}" \
     --disk=size=20,backing_store="${BACKING_STORE_PATH}" ${DISK_OPT:-} \
     ${VIRT_INSTALL_EXTRA_ARGS:-}
-    
-    
+
 
 virsh destroy fcos-"${USER}"
