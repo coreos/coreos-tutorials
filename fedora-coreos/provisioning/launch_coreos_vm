@@ -1,0 +1,89 @@
+#!/bin/bash
+set -euo pipefail
+
+print_help() {
+    cat 1>&2 <<'EOF'
+Usage: $0 [OPTIONS]
+       
+  Launch a coreOS VM instance, optionnally attaching an ignition config. 
+
+  The following options are available:
+
+  -b /path/to/butane      Path to a butane file, to transpile to ignition then pass to the VM
+  -i /path/to/ignition    Path to an ingition file to pass to the VM
+  -d SERIAL               Attach a 1G disk to the VM with a custom serial number
+  -h                      Print this help
+
+
+  The following environnement variables are aslo supported:
+  
+  BACKING_STORE_PATH      Set a custom path for the boot backing store
+  VIRT_INSTALL_EXTRA_ARGS Adds extra arguments to the virt-install command
+
+EOF
+}
+
+
+# Allow overriding the coreos QCOW file
+BACKING_STORE_PATH="${COREOS_BACKING_STORE_PATH:-/srv/fedora-coreos.qcow2}"
+
+
+IGNITION_CONFIG=
+BUTANE_CONFIG=
+IGN_CMDLINE=""
+DISK_OPT=""
+while getopts 'hi:b:d:' FLAG; do
+  case "$FLAG" in
+    i)
+      IGNITION_CONFIG=${OPTARG}
+      ;;
+    b)
+      BUTANE_CONFIG=${OPTARG}
+      ;;
+    d)
+      DISK_OPT="--disk size=1,serial=${OPTARG}"
+      ;;
+    h)
+      print_help
+      exit 0
+      ;;
+    ?)
+      echo "error: unrecognized option: $FLAG"
+      ;;
+    esac
+done    
+shift "$((OPTIND -1))"
+
+if test -n "${IGNITION_CONFIG}" && test -n "${BUTANE_CONFIG}"; then
+  echo "conflicting args: -b and -i. the butane config will be transpiled to ignition"
+  exit 1
+fi
+
+if test -n "${BUTANE_CONFIG}"; then
+  IGNITION_CONFIG=$(mktemp --suffix=.ign)
+  butane --pretty --strict "${BUTANE_CONFIG}" --output "${IGNITION_CONFIG}" --files-dir .
+fi
+
+
+
+# Setup the correct SELinux label to allow access to the config
+if test -n "${IGNITION_CONFIG}"; then 
+  chcon --verbose --type svirt_home_t "${IGNITION_CONFIG}"
+  IGNITION_CONFIG=$(realpath ${IGNITION_CONFIG})
+else 
+  IGNITION_CONFIG="/srv/dummy.ign" 
+fi
+
+
+IGN_CMDLINE=(--qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=${IGNITION_CONFIG}")
+
+# Start a Fedora CoreOS virtual machine
+virt-install --transient --name=fcos-"${USER}" --vcpus=2 --ram=1024 --os-variant=fedora-coreos-stable \
+    --import --network=bridge=virbr0 --graphics=none \
+    "${IGN_CMDLINE}" \
+    --disk=size=20,backing_store="${BACKING_STORE_PATH}" ${DISK_OPT:-} \
+    ${VIRT_INSTALL_EXTRA_ARGS:-}
+    
+    
+
+virsh destroy fcos-"${USER}"
