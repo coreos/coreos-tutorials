@@ -72,15 +72,15 @@ storage:
     - path: /usr/local/bin/butane
       mode: 0755
       contents:
-        source: https://github.com/coreos/butane/releases/download/v0.20.0/butane-x86_64-unknown-linux-gnu
+        source: https://github.com/coreos/butane/releases/download/v0.23.0/butane-x86_64-unknown-linux-gnu
     - path: /usr/local/bin/ignition-validate
       mode: 0755
       contents:
-        source: https://github.com/coreos/ignition/releases/download/v2.18.0/ignition-validate-x86_64-linux
+        source: https://github.com/coreos/ignition/releases/download/v2.20.0/ignition-validate-x86_64-linux
     - path: /usr/local/bin/launch_coreos_vm
       mode: 0755
       contents:
-        source: https://raw.githubusercontent.com/coreos/coreos-tutorials/Patch_main/fedora-coreos/provisioning/launch_coreos_vm
+        source: https://raw.githubusercontent.com/coreos/coreos-tutorials/main/fedora-coreos/provisioning/launch_coreos_vm
     - path: /srv/dummy.ign
       mode: 0755
       contents:
@@ -88,9 +88,9 @@ storage:
     - path: /srv/fedora-coreos.qcow2.xz
       mode: 0644
       contents:
-        source: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/40.20240519.3.0/x86_64/fedora-coreos-40.20240519.3.0-qemu.x86_64.qcow2.xz
+        source: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/41.20250302.3.2/x86_64/fedora-coreos-41.20250302.3.2-qemu.x86_64.qcow2.xz
         verification:
-          hash: sha512-7bc2f327f5d29f26ebf6aaa6983d28946feed3ad1c062751ea3f7f9cee065e7822301c070031015ce4a181fd301783035d7ea953113fb6956ea04a541cf39c85
+          hash: sha256-49f42308233ed373252d60f991eef41266185c687187277a3f303bcd57b0068d
     - path: /usr/local/bin/setup-users.sh
       mode: 0755
       contents:
@@ -118,7 +118,7 @@ systemd:
         Type=oneshot
         RemainAfterExit=yes
         ExecStart=/usr/bin/rpm-ostree install --apply-live --allow-inactive $RPMS
-        ExecStart=sed -i s/192.168.122/192.168.124/g /etc/libvirt/qemu/networks/default.xml 
+        ExecStart=sed -i s/192.168.122/192.168.124/g /etc/libvirt/qemu/networks/default.xml
         ExecStart=systemctl enable --now virtnetworkd.service libvirtd.socket
         ExecStart=/bin/touch /var/lib/%N.stamp
         [Install]
